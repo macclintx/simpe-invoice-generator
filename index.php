@@ -16,7 +16,6 @@
 
     function calculateTotal($items, $taxRate, $discountThreshold, $discountRate){
      
-          $total = 0;
           $subTotal = 0;
           foreach ($items as $item){
             $subTotal += $item['price'] * $item['quantity'];
@@ -24,11 +23,12 @@
 
           $saleTax = $subTotal * ($taxRate/100);
 
+          $discount = 0;
           if($subTotal > $discountThreshold){
             $discount = $subTotal * ($discountRate/100);
           }
 
-          $total += $subTotal - $discount + $saleTax;
+          $total = $subTotal - $discount + $saleTax;
 
           return [
             "subtotal" => $subTotal,
@@ -53,16 +53,13 @@
         echo "---------------------------------\n\n";
 
         echo "Subtotal: ".$invoice['subtotal']." KES\n";
-        echo "Discount (10%): ".$invoice['discount']." KES \n";
-        echo "Tax (16%): ".$invoice['saletax']." KES \n\n";
+        echo "Discount ($discountRate%): ".$invoice['discount']." KES \n";
+        echo "Tax ($taxRate%): ".$invoice['saletax']." KES \n\n";
 
         echo "---------------------------------\n";
-        echo "Total: ".$invoice['total']." KES \n";
+        echo "Total: ".number_format($invoice['total'],2)." KES \n";
 
 
     }
 
     generateInvoice($products, TAX_RATE, DISCOUNT_THRESHOLD, DISCOUNT_RATE);
-
-    
-   

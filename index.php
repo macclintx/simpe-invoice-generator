@@ -4,78 +4,65 @@
     define('DISCOUNT_THRESHOLD', 80000); //discount applies if total exceeds 80000
     define('DISCOUNT_RATE', 10); //10% discount
 
-    $item1_name = 'Laptop';
-    $item1_price = 75000;
-    $item1_quantity = 1;
 
-    $item2_name = 'Mouse';
-    $item2_price = 1500;
-    $item2_quantity = 2;
-
-    $item3_name = 'Keyboard';
-    $item3_price = 3500;
-    $item3_quantity = 3;
+    //array of items
+    $products = [
+        ['name' => 'Laptop', 'price' => 75000, 'quantity' => 2],
+        ['name' => 'Mouse', 'price' => 1500, 'quantity' => 3],
+        ['name' => 'Keyboard', 'price' => 3500, 'quantity' => 4]
+    ];
 
 
 
-    function calculateTotal(){
-        global 
-                $item1_price,
-                $item1_quantity,
-                $item2_price,
-                $item2_quantity,
-                $item3_price,
-                $item3_quantity,
-                $discount,
-                $tax,
-                $subTotal;
+    function calculateTotal($items, $taxRate, $discountThreshold, $discountRate){
+     
+          $total = 0;
+          $subTotal = 0;
+          foreach ($items as $item){
+            $subTotal += $item['price'] * $item['quantity'];
+          }
 
-            
-        $subTotal = $item1_price + ($item2_price * $item2_quantity) + ($item3_price * $item3_quantity); 
-        $tax = $subTotal * 0.16;
-        if( $subTotal > DISCOUNT_THRESHOLD):
-            $discount = $subTotal * 0.1;
-            return ($subTotal + ($subTotal * (TAX_RATE/100))) - ($subTotal * (DISCOUNT_RATE/100));
-        else:
-            return $subTotal + ($subTotal * 0.16);
-        endif;
+          $saleTax = $subTotal * ($taxRate/100);
+
+          if($subTotal > $discountThreshold){
+            $discount = $subTotal * ($discountRate/100);
+          }
+
+          $total += $subTotal - $discount + $saleTax;
+
+          return [
+            "subtotal" => $subTotal,
+            "discount" => $discount,
+            "saletax" => $saleTax,
+            "total" => $total
+          ];
         
     }
 
 
-    function generateInvoice(){
-        global 
-                $item1_name,
-                $item1_price,
-                $item1_quantity,
-                $item2_name,
-                $item2_price,
-                $item2_quantity,
-                $item3_name,
-                $item3_price,
-                $item3_quantity,
-                $subTotal,
-                $discount,
-                $tax;
-                
-        calculateTotal();
+    function generateInvoice($items, $taxRate, $discountThreshold, $discountRate){
+        $invoice = calculateTotal($items, $taxRate, $discountThreshold, $discountRate);
+        
 
-        echo "Itemized Invoice \n---------------------------\n";
+        echo "Itemized Invoice\n";
+        echo "---------------------------------\n";
+        foreach ($items as $item){
+            echo $item['quantity']."x ".$item['name']." - ".$item['price'] * $item['quantity']." KES\n";
+        }
 
-        echo $item1_quantity . 'x '. $item1_name . ' - ' . $item1_price * $item1_quantity ;echo "\n";
-        echo $item2_quantity . 'x '. $item2_name . ' - ' . $item2_price * $item2_quantity ;echo "\n";
-        echo $item3_quantity . 'x '. $item3_name . ' - ' . $item3_price * $item3_quantity ;echo "\n";
+        echo "---------------------------------\n\n";
+
+        echo "Subtotal: ".$invoice['subtotal']." KES\n";
+        echo "Discount (10%): ".$invoice['discount']." KES \n";
+        echo "Tax (16%): ".$invoice['saletax']." KES \n\n";
+
+        echo "---------------------------------\n";
+        echo "Total: ".$invoice['total']." KES \n";
 
 
-        echo "---------------------------\n";
-
-        echo "Subtotal: $subTotal KES \nDiscount (10%): $discount KES\nTax (16%): $tax KES\n";
-
-        echo "\n---------------------------\n";
-        echo "Total: ".calculateTotal();
     }
 
-    generateInvoice();
+    generateInvoice($products, TAX_RATE, DISCOUNT_THRESHOLD, DISCOUNT_RATE);
 
     
    

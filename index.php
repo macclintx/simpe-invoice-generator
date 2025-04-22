@@ -3,14 +3,15 @@
     define('TAX_RATE', 16); //16% VAT
     define('DISCOUNT_THRESHOLD', 80000); //discount applies if total exceeds 80000
     define('DISCOUNT_RATE', 10); //10% discount
+    define('LAPTOP_PRICE', 75000);
+    define('MOUSE_PRICE', 1500);
+    define('KEYBOARD_PRICE', 3500);
+
+    $option = isset($_POST['item_option']) ? $_POST['item_option'] : $optErr = 'No item matched'; 
 
 
     //array of items
-    $products = [
-        ['name' => 'Laptop', 'price' => 75000, 'quantity' => 2],
-        ['name' => 'Mouse', 'price' => 1500, 'quantity' => 3],
-        ['name' => 'Keyboard', 'price' => 3500, 'quantity' => 4]
-    ];
+    $products = [];
 
 
 
@@ -44,6 +45,7 @@
         $invoice = calculateTotal($items, $taxRate, $discountThreshold, $discountRate);
         
 
+        /*
         echo "Itemized Invoice\n";
         echo "---------------------------------\n";
         foreach ($items as $item){
@@ -59,7 +61,9 @@
         echo "---------------------------------\n";
         echo "Total: ".number_format($invoice['total'],2)." KES \n";
 
-
+      */
     }
 
     generateInvoice($products, TAX_RATE, DISCOUNT_THRESHOLD, DISCOUNT_RATE);
+
+    require 'index.view.php';

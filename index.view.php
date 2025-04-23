@@ -22,5 +22,30 @@
         
             <input type="submit" value="Generate invoice">
         </form>
+
+        <br><br><br>
+        <h4>Itemized Invoice <br>************************************</h4>
+        <?php
+            foreach( $products as $product):
+                echo "<h3>?".
+                    $product['quantity']."x ".$product['name']." - ".$product['price'] * $product['quantity'].
+                "</h3>";
+            endforeach;
+        ?>
+
+        <br><br>
+        <h4>************************************</h4>
+    
+        <?php 
+            echo "<h3>";
+            echo "Subtotal: ".$invoice['subtotal']." KES<br>";
+            echo "Discount ($discountRate%): ".$invoice['discount']." KES<br>";
+            echo "Tax ($taxRate%): ".$invoice['saletax']." KES <br>";
+            echo "</h3>";
+
+            echo "<br><br><h4>************************************</h4>";
+            echo "Total: ".number_format($invoice['total'],2)." KES <br>";
+        ?>
+    
     </body>
 </html>

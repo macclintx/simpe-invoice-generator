@@ -6,13 +6,51 @@
     define('LAPTOP_PRICE', 75000);
     define('MOUSE_PRICE', 1500);
     define('KEYBOARD_PRICE', 3500);
+    
+ 
 
-    $option = isset($_POST['item_option']) ? $_POST['item_option'] : $optErr = 'No item matched'; 
+      if( isset($_POST['laptop']) && isset($_POST['mouse']) && isset($_POST['keyboard'])):
+        $products = [
+          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
+          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
+          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
+        ];
+      
+      elseif(isset($_POST['laptop']) && isset($_POST['mouse'])):
+        $products = [
+          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
+          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
+        ];
+      
+      elseif (isset($_POST['laptop']) && isset($_POST['keyboard'])):
+        $products = [
+          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
+          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
+        ];
 
+      elseif( isset($_POST['mouse']) && isset($_POST['keyboard'])):
+        $products = [
+          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
+          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
+        ];
+      
+      elseif( isset($_POST['laptop']) ):
+        $products = [
+          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
+          ];
+      
+      elseif( isset($_POST['mouse']) ):
+        $products = [
+          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
+        ];
+        
+      elseif( isset($_POST['keyboard'])):
+        $products = [
+          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
+        ];    
 
-    //array of items
-    $products = [];
-
+      endif;
+        
 
 
     function calculateTotal($items, $taxRate, $discountThreshold, $discountRate){
@@ -41,29 +79,11 @@
     }
 
 
-    function generateInvoice($items, $taxRate, $discountThreshold, $discountRate){
-        $invoice = calculateTotal($items, $taxRate, $discountThreshold, $discountRate);
+    
+        $invoice = calculateTotal($products, $taxRate, $discountThreshold, $discountRate);
         
 
-        /*
-        echo "Itemized Invoice\n";
-        echo "---------------------------------\n";
-        foreach ($items as $item){
-            echo $item['quantity']."x ".$item['name']." - ".$item['price'] * $item['quantity']." KES\n";
-        }
+    
 
-        echo "---------------------------------\n\n";
-
-        echo "Subtotal: ".$invoice['subtotal']." KES\n";
-        echo "Discount ($discountRate%): ".$invoice['discount']." KES \n";
-        echo "Tax ($taxRate%): ".$invoice['saletax']." KES \n\n";
-
-        echo "---------------------------------\n";
-        echo "Total: ".number_format($invoice['total'],2)." KES \n";
-
-      */
-    }
-
-    generateInvoice($products, TAX_RATE, DISCOUNT_THRESHOLD, DISCOUNT_RATE);
 
     require 'index.view.php';

@@ -7,52 +7,30 @@
     define('MOUSE_PRICE', 1500);
     define('KEYBOARD_PRICE', 3500);
     
- 
-
-      if( isset($_POST['laptop']) && isset($_POST['mouse']) && isset($_POST['keyboard'])):
-        $products = [
-          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
-          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
-          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
-        ];
-      
-      elseif(isset($_POST['laptop']) && isset($_POST['mouse'])):
-        $products = [
-          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
-          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
-        ];
-      
-      elseif (isset($_POST['laptop']) && isset($_POST['keyboard'])):
-        $products = [
-          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
-          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
-        ];
-
-      elseif( isset($_POST['mouse']) && isset($_POST['keyboard'])):
-        $products = [
-          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
-          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
-        ];
-      
-      elseif( isset($_POST['laptop']) ):
-        $products = [
-          ['name' => $_POST['laptop']], 'price' => LAPTOP_PRICE , 'quantity' => $_POST['laptop_quantity'],
-          ];
-      
-      elseif( isset($_POST['mouse']) ):
-        $products = [
-          ['name' => $_POST['mouse']], 'price' => MOUSE_PRICE , 'quantity' => $_POST['mouse_quantity'],
-        ];
-        
-      elseif( isset($_POST['keyboard'])):
-        $products = [
-          ['name' => $_POST['keyboard']], 'price' => KEYBOARD_PRICE , 'quantity' => $_POST['keyboard_quantity'],
-        ];    
-
-      endif;
-        
 
 
+    if ((isset($_POST['laptop']) && $_POST['laptop_quantity'] === '') ||
+        (isset($_POST['mouse']) && $_POST['mouse_quantity'] === '') ||
+        (isset($_POST['keyboard']) && $_POST['keyboard_quantity'] === '')) { 
+      $err = 'Please enter quantity for selected items.';
+} else {
+  $products = [];
+
+  if (isset($_POST['laptop']) && $_POST['laptop_quantity'] !== '') {
+      $products[] = ['name' => 'Laptop', 'price' => LAPTOP_PRICE, 'quantity' => $_POST['laptop_quantity']];
+  }
+  
+  if (isset($_POST['mouse']) && $_POST['mouse_quantity'] !== '') {
+      $products[] = ['name' => 'Mouse', 'price' => MOUSE_PRICE, 'quantity' => $_POST['mouse_quantity']];
+  }
+  
+  if (isset($_POST['keyboard']) && $_POST['keyboard_quantity'] !== '') {
+      $products[] = ['name' => 'Keyboard', 'price' => KEYBOARD_PRICE, 'quantity' => $_POST['keyboard_quantity']];
+  }
+  
+}
+
+   
     function calculateTotal($items, $taxRate, $discountThreshold, $discountRate){
      
           $subTotal = 0;
@@ -80,8 +58,8 @@
 
 
     
-        $invoice = calculateTotal($products, $taxRate, $discountThreshold, $discountRate);
-        
+        $invoice = calculateTotal($products, TAX_RATE, DISCOUNT_THRESHOLD, DISCOUNT_RATE);
+  
 
     
 
